@@ -86,6 +86,12 @@ public class ResetLinkAssignment extends AssignmentEndpoint {
     	ModelAndView modelAndView = new ModelAndView();
         if (ResetLinkAssignment.resetLinks.contains(link)) {
             PasswordChangeForm form = new PasswordChangeForm();
+            if (!resetLinks.contains(link)) {
+                throw new IllegalArgumentException("Reset link not found or invalid");
+            }
+            if (!checkIfLinkIsFromTom(link)) {
+                throw new UnauthorizedAccessException("Reset link does not belong to the user");
+            }
             form.setResetLink(link);
             model.addAttribute("form", form);
             modelAndView.addObject("form", form);
